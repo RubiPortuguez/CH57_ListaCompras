@@ -9,7 +9,13 @@ const alertValidacionesTexto = document.getElementById('alertValidacionesTexto')
 const tablaListaCompras = document.getElementById('tablaListaCompras');
 const cuerpoTabla = tablaListaCompras.getElementsByTagName('tbody').item(0); // trae contenido de otro elemento, no del document
 
+const contadorProductos = document.getElementById('contadorProductos');
+const productosTotal = document.getElementById('productosTotal');
+const precioTotal = document.getElementById('precioTotal');
+
 let cont = 0; // contador
+let costoTotal = 0;
+let totalProductos = 0;
 
 /////////////////////////////////////////////////////// FUNCIONES 
 
@@ -78,6 +84,16 @@ btnAgregar.addEventListener('click', function (event) {
 
         // Agregar los elementos a la tabla
         cuerpoTabla.insertAdjacentHTML('beforeend', row);
+
+        // Actualización del resumen
+        contadorProductos.innerText = cont; // Botón rojo resumen
+        totalProductos+= Number(txtNumber.value);
+        productosTotal.innerText = totalProductos;
+        costoTotal+= (precio*Number(txtNumber.value));
+        precioTotal.innerText = new Intl.NumberFormat("es-MX", 
+                    { style: "currency", currency: "MXN" }).format(costoTotal);
+    
+
         // Limpiar los campos
         txtName.value = '';
         txtNumber.value = '';
