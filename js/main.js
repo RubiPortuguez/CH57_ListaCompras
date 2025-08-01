@@ -85,10 +85,10 @@ btnAgregar.addEventListener('click', function (event) {
                     </tr> `
 
         let elemento = {
-            'cont' : cont,
-            'nombre' : txtName.value,
-            'cantidad' : txtNumber.value,
-            'precio' : precio
+            'cont': cont,
+            'nombre': txtName.value,
+            'cantidad': txtNumber.value,
+            'precio': precio
         };
         datos.push(elemento);
         localStorage.setItem('datos', JSON.stringify(datos));
@@ -121,6 +121,71 @@ btnAgregar.addEventListener('click', function (event) {
         // Manda el cursor al campo de nombre 
         txtName.focus();
     }; // isValid
-
-
 }); // btnAgregar click
+
+window.addEventListener('load', function (event) {
+    event.preventDefault();
+
+    if (this.localStorage.getItem('datos') != null) {
+        datos = JSON.parse(this.localStorage.getItem('datos'));
+        datos.forEach((dato) => {
+            let row = ` <tr> 
+                        <td>${dato.cont}</td>
+                        <td>${dato.nombre}</td>
+                        <td>${dato.cantidad}</td>
+                        <td>${dato.precio}</td>
+                    </tr> `
+            cuerpoTabla.insertAdjacentHTML('beforeend', row);
+        }); //forEach
+    } datos != null
+
+    // Cargar los datos guardados en sesiones anteriores 
+    if (this.localStorage.getItem('resumen') != null) {
+        let resumen = JSON.parse(this.localStorage.getItem('resumen'));
+        costoTotal = resumen.costoTotal;
+        totalProductos = resumen.totalProductos;
+        cont = resumen.cont;
+    } /// resumen !=null
+
+    contadorProductos.innerText = cont;
+    productosTotal.innerText = totalProductos;
+    precioTotal.innerText = new Intl.NumberFormat("es-MX",
+        { style: "currency", currency: "MXN" }).format(costoTotal);
+
+}); // window load 
+
+btnClear.addEventListener('click', function (event) {
+    event.preventDefault();
+
+    // 1. Eliminar el local storage
+    localStorage.removeItem('datos');
+    localStorage.removeItem('resumen');
+
+    // 2. Limpiar la tabla
+    cuerpoTabla.innerHTML = '';
+
+    // 3. Limpiar los campos
+    txtName.value = '';
+    txtNumber.value = '';
+    txtName.focus();
+
+    // 4. Limpiar el borde
+    txtName.style.border = '';
+    txtNumber.style.border = '';
+
+    // 5. Limpiar los alerts
+    alertValidacionesTexto.innerHTML = '';
+    alertValidaciones.style.display = 'none';
+
+    // 6. Limpiar el resumen
+    cont = 0;
+    costoTotal = 0;
+    totalProductos = 0;
+    contadorProductos.innerText = cont;
+    productosTotal.innerText = totalProductos;
+    precioTotal.innerText = new Intl.NumberFormat("es-MX",
+        { style: "currency", currency: "MXN" }).format(costoTotal);
+    
+        datos= new Array();
+
+}); // btnClear
