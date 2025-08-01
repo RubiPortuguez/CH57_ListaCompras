@@ -17,6 +17,8 @@ let cont = 0; // contador
 let costoTotal = 0;
 let totalProductos = 0;
 
+let datos = new Array(); // []
+
 /////////////////////////////////////////////////////// FUNCIONES 
 
 // Validación de la entrada "cantidad"
@@ -82,17 +84,36 @@ btnAgregar.addEventListener('click', function (event) {
                         <td>${precio}</td>
                     </tr> `
 
+        let elemento = {
+            'cont' : cont,
+            'nombre' : txtName.value,
+            'cantidad' : txtNumber.value,
+            'precio' : precio
+        };
+        datos.push(elemento);
+        localStorage.setItem('datos', JSON.stringify(datos));
+
         // Agregar los elementos a la tabla
         cuerpoTabla.insertAdjacentHTML('beforeend', row);
 
         // Actualización del resumen
         contadorProductos.innerText = cont; // Botón rojo resumen
-        totalProductos+= Number(txtNumber.value);
+        totalProductos += Number(txtNumber.value);
         productosTotal.innerText = totalProductos;
-        costoTotal+= (precio*Number(txtNumber.value));
-        precioTotal.innerText = new Intl.NumberFormat("es-MX", 
-                    { style: "currency", currency: "MXN" }).format(costoTotal);
-    
+        costoTotal += (precio * Number(txtNumber.value));
+        precioTotal.innerText = new Intl.NumberFormat("es-MX",
+            { style: "currency", currency: "MXN" }).format(costoTotal);
+
+        // Creando un objeto
+        let resumen = {
+            'cont': cont,
+            'totalProductos': totalProductos,
+            'costoTotal': costoTotal
+        };
+
+        // Guardar el objeto en el local storage (solo guarda cadenas de texto)
+        localStorage.setItem('resumen', JSON.stringify(resumen));
+
 
         // Limpiar los campos
         txtName.value = '';
